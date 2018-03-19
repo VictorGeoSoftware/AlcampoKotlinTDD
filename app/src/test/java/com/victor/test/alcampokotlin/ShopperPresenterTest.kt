@@ -1,6 +1,7 @@
 package com.victor.test.alcampokotlin
 
 import android.content.Context
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -40,7 +41,7 @@ class ShopperPresenterTest {
 
     private fun createMockedShopperPresenter(): ShopperPresenter {
         testScheduler = TestScheduler()
-        val shopperPresenter = ShopperPresenter(testScheduler, testScheduler, shopperRepository)
+        val shopperPresenter = ShopperPresenter(testScheduler, testScheduler)
         shopperPresenter.view = shopperView
         return shopperPresenter
     }
@@ -81,6 +82,6 @@ class ShopperPresenterTest {
         testScheduler.triggerActions()
 
 
-        verify(shopperView).onContextValueReceived("abc123")
+        verify(shopperView).onContextValueReceived(any())
     }
 }

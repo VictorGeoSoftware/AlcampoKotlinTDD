@@ -2,9 +2,11 @@ package com.victor.test.alcampokotlin.di
 
 import com.victor.test.alcampokotlin.BuildConfig
 import com.victor.test.alcampokotlin.network.ShopperRepository
+import com.victor.test.alcampokotlin.network.StoreRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -33,8 +35,14 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkhttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().readTimeout(10, TimeUnit.SECONDS).connectTimeout(10, TimeUnit.SECONDS).build()
+    fun provideOkHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        val okHttpClient = OkHttpClient.Builder().readTimeout(10, TimeUnit.SECONDS).connectTimeout(10, TimeUnit.SECONDS)
+        okHttpClient.addInterceptor(interceptor)
+
+        return okHttpClient.build()
     }
 
     @Provides
@@ -58,5 +66,9 @@ class NetworkModule {
     // -------------------------------------------------------------------- WEB SERVICES --------------------------------------------------------------------
     @Provides
     @Singleton
-    fun provideShopperRequest(retrofit: Retrofit) = retrofit.create(ShopperRepository::class.java)
+    fun provideShopperRequest(retrofit: Retrofit) = retrofit.create(ShopperRepository::class.java)!!
+
+    @Provides
+    @Singleton
+    fun provideStoreRepository(retrofit: Retrofit) = retrofit.create(StoreRepository::class.java)!!
 }

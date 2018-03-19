@@ -1,6 +1,7 @@
 package com.victor.test.alcampokotlin.di
 
 import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
+import com.victor.test.alcampokotlin.presenters.stores.StorePresenter
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,4 +14,5 @@ import javax.inject.Singleton
 @Component(modules = [NetworkModule::class, PresenterModule::class])
 interface PresenterComponent {
     fun inject(shopperPresenter: ShopperPresenter)
+    fun inject(presenter: StorePresenter)
 }

@@ -16,9 +16,8 @@ import javax.inject.Singleton
 
 @Module
 class PresenterModule {
-    @Inject lateinit var shopperRepository: ShopperRepository
 
     @Provides
     @Singleton
-    fun provideShopperPresenter() = ShopperPresenter(AndroidSchedulers.mainThread(), Schedulers.newThread(), shopperRepository)
+    fun provideShopperPresenter() = ShopperPresenter(AndroidSchedulers.mainThread(), Schedulers.newThread())
 }

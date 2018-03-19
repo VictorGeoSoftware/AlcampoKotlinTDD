@@ -25,12 +25,11 @@ class UniqueId(val context: Context) {
 
     fun getNewUniqueId(): String {
         val newUniqueId = Build.ID + "" + Date().time
-//        setUniqueId(newUniqueId)
+        setUniqueId(newUniqueId)
         return newUniqueId
     }
 
     private fun setUniqueId(uniqueId: String) {
-//    private fun setUniqueId(uniqueId: String, sharedPreferences: SharedPreferences) {
         val pref = context.getSharedPreferences(UNIQUE_ID, Context.MODE_PRIVATE)
         val editor = pref.edit()
         editor.putString(UNIQUE_ID, uniqueId)
