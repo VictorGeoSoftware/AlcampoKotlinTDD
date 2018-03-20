@@ -10,9 +10,8 @@ import com.victor.test.alcampokotlin.di.PresenterModule
  */
 abstract class Presenter<T1> {
     var view: T1? = null
-//    set(value) {
-//        System.out.println("pasa por setView :: $value")
-//    }
+
+
     val presenterComponent: PresenterComponent by lazy {
         DaggerPresenterComponent.builder().presenterModule(PresenterModule()).build()
     }

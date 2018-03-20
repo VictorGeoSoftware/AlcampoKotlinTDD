@@ -1,5 +1,6 @@
 package com.victor.test.alcampokotlin.di
 
+import com.victor.test.alcampokotlin.di.scopes.ActivityScope
 import com.victor.test.alcampokotlin.network.ShopperRepository
 import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
 import dagger.Module
@@ -18,6 +19,7 @@ import javax.inject.Singleton
 class PresenterModule {
 
     @Provides
-    @Singleton
+//    @Singleton
+    @ActivityScope
     fun provideShopperPresenter() = ShopperPresenter(AndroidSchedulers.mainThread(), Schedulers.newThread())
 }
