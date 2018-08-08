@@ -9,19 +9,16 @@ ext {
     productionTimeOut = '30000'
     prodUrl = '"https://app.alcampo.es/alcampoApp/services/"'
     prodUrlRoot = '"https://app.alcampo.es"'
-
-//    prodLocal = '"https://app.alcampo.es/alcampoApp/services/"'
-//    prodUrlLocal = '"https://app.alcampo.es"'
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.30'
+    ext.kotlin_version = '1.2.51'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong

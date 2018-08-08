@@ -9,19 +9,10 @@ import javax.inject.Inject
  * Created by victorpalmacarrasco on 6/3/18.
  * ${APP_NAME}
  */
-class ShopperPresenter(val androidSchedulers: Scheduler, val subscriberSchedulers: Scheduler): Presenter<ShopperPresenter.ShopperView>() {
+class ShopperPresenter @Inject constructor(private val androidSchedulers: Scheduler,
+                                           private val subscriberSchedulers: Scheduler,
+                                           private val shopperRepository: ShopperRepository): Presenter<ShopperPresenter.ShopperView>() {
 
-    @Inject lateinit var injShopperRepository:ShopperRepository
-
-
-    init {
-        presenterComponent.inject(this)
-    }
-
-    override fun destroy() {
-        view = null
-        System.out.println("ShopperPresenter - destroy!")
-    }
 
     interface ShopperView {
         fun onContextValueReceived(context: String) { }
@@ -34,7 +25,7 @@ class ShopperPresenter(val androidSchedulers: Scheduler, val subscriberScheduler
 
         System.out.println("ShopperPresenter - getShopperStateNew - entra!")
 
-        injShopperRepository.getShopperStateNew(params)
+        shopperRepository.getShopperStateNew(params)
                 .observeOn(androidSchedulers)
                 .subscribeOn(subscriberSchedulers)
                 .doOnSubscribe {
@@ -55,6 +46,11 @@ class ShopperPresenter(val androidSchedulers: Scheduler, val subscriberScheduler
                         }
                 )
 
+    }
+
+    override fun destroy() {
+        view = null
+        System.out.println("ShopperPresenter - destroy!")
     }
 }
 

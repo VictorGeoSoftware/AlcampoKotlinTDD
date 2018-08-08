@@ -1,18 +1,22 @@
 package com.victor.test.alcampokotlin.di
 
-import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
-import com.victor.test.alcampokotlin.presenters.stores.StorePresenter
-import dagger.Component
-import javax.inject.Singleton
+import com.victor.test.alcampokotlin.di.scopes.ViewScope
+import com.victor.test.alcampokotlin.ui.MainActivity
+import com.victor.test.alcampokotlin.ui.StoreActivity
+import dagger.Subcomponent
 
 /**
  * Created by victorpalmacarrasco on 7/3/18.
  * ${APP_NAME}
  */
 
-@Singleton
-@Component(modules = [NetworkModule::class, PresenterModule::class])
+/*
+    So, this is a Subcomponent! A component which inherit all dependecies of father component!
+    I here we have to implement the custom scope!!
+ */
+@ViewScope
+@Subcomponent(modules = [PresenterModule::class])
 interface PresenterComponent {
-    fun inject(shopperPresenter: ShopperPresenter)
-    fun inject(presenter: StorePresenter)
+    fun inject(target: MainActivity)
+    fun inject(target: StoreActivity)
 }

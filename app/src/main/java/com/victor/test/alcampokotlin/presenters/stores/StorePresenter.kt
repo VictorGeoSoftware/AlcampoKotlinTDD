@@ -12,16 +12,9 @@ import kotlin.collections.HashMap
  * Created by victorpalmacarrasco on 6/3/18.
  * ${APP_NAME}
  */
-class StorePresenter( val androidSchedulers: Scheduler, val subscriberSchedulers: Scheduler ): Presenter<StorePresenter.StoreView>() {
-
-    @Inject lateinit var injectedStoreRepository: StoreRepository
-
-
-    init {
-        presenterComponent.inject(this)
-    }
-
-
+class StorePresenter @Inject constructor(private val androidSchedulers: Scheduler,
+                                         private val subscriberSchedulers: Scheduler,
+                                         private val storeRepository: StoreRepository): Presenter<StorePresenter.StoreView>() {
 
     interface StoreView {
         fun onStoreListReceived(stores: HashMap<String, StoreListByRegionDto>) {}
@@ -30,7 +23,7 @@ class StorePresenter( val androidSchedulers: Scheduler, val subscriberSchedulers
 
     fun getStoreList(params: GetStoreListByRegionBody) {
 
-        injectedStoreRepository.getStoreListByRegion(params)
+        storeRepository.getStoreListByRegion(params)
                 .observeOn(androidSchedulers)
                 .subscribeOn(subscriberSchedulers)
                 .subscribe(

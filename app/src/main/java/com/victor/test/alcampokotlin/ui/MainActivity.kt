@@ -2,12 +2,12 @@ package com.victor.test.alcampokotlin.ui
 
 import android.content.Intent
 import android.os.Bundle
+import com.victor.test.alcampokotlin.MainApplication
 import com.victor.test.alcampokotlin.R
 import com.victor.test.alcampokotlin.data.Constants
 import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
 import com.victor.test.alcampokotlin.utils.UniqueId
 import com.victor.test.alcampokotlin.utils.traceObject
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
@@ -15,15 +15,15 @@ import kotlin.collections.HashMap
 class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
 
     @Inject lateinit var shopperPresenter: ShopperPresenter
-//    private val component by lazy { app.component.plus(MainActivityModule(this)) }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        component.inject(this)
-        component.inject(this)
-
+//        (application as MainApplication).component.inject(this)
+        (application as MainApplication).presenterComponent.inject(this)
 
         val language = Locale.getDefault().toString()
         val params = HashMap<String, String>()
@@ -32,7 +32,7 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
         params["platform"] = Constants.WS_PARAM_PLATFORM
         params["versionParam"] = Constants.WS_PARAM_VERSIONPARAM
         traceObject(params)
-        btnStart.setOnClickListener { shopperPresenter.getShopperStateNew(params) }
+//        btnStart.setOnClickListener { shopperPresenter.getShopperStateNew(params) }
     }
 
     override fun onResume() {
@@ -51,6 +51,7 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     // --------------------------------------------- SHOPPER VIEW INTERFACE ---------------------------------------------
     override fun onContextValueReceived(context: String) {
         System.out.println("MainActivity - onContextValueReceived :: $context")
+//        dataManager.shopperCtx = context
         val intent = Intent(this, StoreActivity::class.java)
         startActivity(intent)
     }
