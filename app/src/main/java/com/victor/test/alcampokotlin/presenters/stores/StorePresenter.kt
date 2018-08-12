@@ -1,5 +1,6 @@
 package com.victor.test.alcampokotlin.presenters.stores
 
+import com.victor.test.alcampokotlin.data.DataManager
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.network.StoreRepository
 import com.victor.test.alcampokotlin.network.bodies.GetStoreListByRegionBody
@@ -14,7 +15,8 @@ import kotlin.collections.HashMap
  */
 class StorePresenter @Inject constructor(private val androidSchedulers: Scheduler,
                                          private val subscriberSchedulers: Scheduler,
-                                         private val storeRepository: StoreRepository): Presenter<StorePresenter.StoreView>() {
+                                         private val storeRepository: StoreRepository,
+                                         private val dataManager: DataManager): Presenter<StorePresenter.StoreView>() {
 
     interface StoreView {
         fun onStoreListReceived(stores: HashMap<String, StoreListByRegionDto>) {}

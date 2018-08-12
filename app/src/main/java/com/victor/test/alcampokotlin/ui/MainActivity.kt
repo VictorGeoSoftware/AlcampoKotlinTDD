@@ -22,7 +22,6 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        (application as MainApplication).component.inject(this)
         (application as MainApplication).presenterComponent.inject(this)
 
         val language = Locale.getDefault().toString()

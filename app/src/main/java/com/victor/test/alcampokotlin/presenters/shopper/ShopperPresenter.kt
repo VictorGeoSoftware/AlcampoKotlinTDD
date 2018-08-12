@@ -1,5 +1,6 @@
 package com.victor.test.alcampokotlin.presenters.shopper
 
+import com.victor.test.alcampokotlin.data.DataManager
 import com.victor.test.alcampokotlin.network.ShopperRepository
 import com.victor.test.alcampokotlin.presenters.Presenter
 import io.reactivex.Scheduler
@@ -11,7 +12,8 @@ import javax.inject.Inject
  */
 class ShopperPresenter @Inject constructor(private val androidSchedulers: Scheduler,
                                            private val subscriberSchedulers: Scheduler,
-                                           private val shopperRepository: ShopperRepository): Presenter<ShopperPresenter.ShopperView>() {
+                                           private val shopperRepository: ShopperRepository,
+                                           private val dataManager: DataManager): Presenter<ShopperPresenter.ShopperView>() {
 
 
     interface ShopperView {
@@ -34,8 +36,10 @@ class ShopperPresenter @Inject constructor(private val androidSchedulers: Schedu
                 .subscribe(
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - onNext! :: ${it.shopperCtx} | $view")
-                            // TODO :: habria que almacenar el resto de parametros
                             view?.onContextValueReceived(it.shopperCtx)
+
+                            dataManager.shopperCtx = it.shopperCtx
+                            dataManager.favouriteStore = it.favouriteStore
                         },
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - error :: " + it.localizedMessage)

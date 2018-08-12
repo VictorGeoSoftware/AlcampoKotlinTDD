@@ -1,5 +1,6 @@
 package com.victor.test.alcampokotlin.di
 
+import android.content.Context
 import com.victor.test.alcampokotlin.data.DataManager
 import dagger.Module
 import dagger.Provides
@@ -14,5 +15,5 @@ import javax.inject.Singleton
 class DataManagerModule {
     @Provides
     @Singleton
-    fun provideDataManager(): DataManager = DataManager()
+    fun provideDataManager(context: Context): DataManager = DataManager(context)
 }

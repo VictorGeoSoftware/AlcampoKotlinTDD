@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import com.victor.test.alcampokotlin.data.DataManager
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.data.models.WsError
 import com.victor.test.alcampokotlin.network.StoreRepository
@@ -28,6 +29,7 @@ class StorePresenterTest {
     @Mock lateinit var context: Context
     @Mock lateinit var mockView: StorePresenter.StoreView
     @Mock lateinit var storeRepository: StoreRepository
+    @Mock lateinit var dataManager: DataManager
     private lateinit var storePresenter: StorePresenter
     private lateinit var testScheduler: TestScheduler
 
@@ -38,7 +40,7 @@ class StorePresenterTest {
 
     private fun createMockPresenter(): StorePresenter {
         testScheduler = TestScheduler()
-        val storePresenter = StorePresenter(testScheduler, testScheduler)
+        val storePresenter = StorePresenter(testScheduler, testScheduler, storeRepository, dataManager)
         storePresenter.view = mockView
 //        storePresenter.injectedStoreRepository = storeRepository
         return storePresenter

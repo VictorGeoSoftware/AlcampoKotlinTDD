@@ -22,7 +22,7 @@ import javax.inject.Singleton
 
 
 @Module
-class NetworkModule {
+open class NetworkModule {
 
     companion object {
         const val NAME_BASE_URL = "NAME_BASE_URL"
@@ -66,9 +66,9 @@ class NetworkModule {
     // -------------------------------------------------------------------- WEB SERVICES --------------------------------------------------------------------
     @Provides
     @Singleton
-    fun provideShopperRequest(retrofit: Retrofit) = retrofit.create(ShopperRepository::class.java)!!
+    open fun provideShopperRequest(retrofit: Retrofit) = retrofit.create(ShopperRepository::class.java)!!
 
     @Provides
     @Singleton
-    fun provideStoreRepository(retrofit: Retrofit) = retrofit.create(StoreRepository::class.java)!!
+    open fun provideStoreRepository(retrofit: Retrofit) = retrofit.create(StoreRepository::class.java)!!
 }
