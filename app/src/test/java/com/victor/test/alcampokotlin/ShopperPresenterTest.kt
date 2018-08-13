@@ -1,6 +1,5 @@
 package com.victor.test.alcampokotlin
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -17,16 +16,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
-import java.sql.Time
-import java.util.*
-import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 /**
@@ -86,9 +79,11 @@ class ShopperPresenterTest: ParentUnitTest() {
          * So, for testing in both REAL and MOCKED cases, it's necessary to comment the corresponding provider, in TestNetworkModule class,
          * according with the context we are going to testK
          */
+
+        whenever(dataManager.getShopperStateNewParams()).thenReturn(shopperStateParams)
         whenever(mockedShopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
 
-        shopperPresenter.getShopperStateNew(shopperStateParams)
+        shopperPresenter.getShopperStateNew()
         testScheduler.triggerActions()
 
         verify(mockedShopperRepository, times(1)).getShopperStateNew(shopperStateParams)
@@ -99,9 +94,10 @@ class ShopperPresenterTest: ParentUnitTest() {
     fun `should return error in getShopperStateNew`() {
         val throwable = Throwable()
         val error = Observable.error<GetShopperStateNewResp>(throwable)
+        whenever(dataManager.getShopperStateNewParams()).thenReturn(shopperStateParams)
         whenever(shopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(error)
 
-        shopperPresenter.getShopperStateNew(shopperStateParams)
+        shopperPresenter.getShopperStateNew()
         testScheduler.triggerActions()
 
         verify(shopperView, times(1)).onNetworkError(throwable)

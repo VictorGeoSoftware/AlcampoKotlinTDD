@@ -24,14 +24,8 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
         setContentView(R.layout.activity_main)
         (application as MainApplication).presenterComponent.inject(this)
 
-        val language = Locale.getDefault().toString()
-        val params = HashMap<String, String>()
-        params["lang"] = language
-        params["terminalUniqueId"] = UniqueId(this).getNewUniqueId()  // La pasaremos por parametro
-        params["platform"] = Constants.WS_PARAM_PLATFORM
-        params["versionParam"] = Constants.WS_PARAM_VERSIONPARAM
-        traceObject(params)
-//        btnStart.setOnClickListener { shopperPresenter.getShopperStateNew(params) }
+        shopperPresenter.view = this
+        shopperPresenter.getShopperStateNew()
     }
 
     override fun onResume() {
@@ -49,9 +43,12 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     // ------------------------------------------------------------------------------------------------------------------
     // --------------------------------------------- SHOPPER VIEW INTERFACE ---------------------------------------------
     override fun onContextValueReceived() {
-        // TODO :: compobar si hay tienda seleccionada
+        // TODO :: check if favouriteStore exist!
     }
 
+    override fun onNetworkError(exception: Throwable) {
+
+    }
 
 
 

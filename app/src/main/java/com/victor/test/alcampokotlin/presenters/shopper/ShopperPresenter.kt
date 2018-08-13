@@ -31,9 +31,8 @@ class ShopperPresenter @Inject constructor(private val androidSchedulers: Schedu
 
 
 
-
-
-    fun getShopperStateNew(params: HashMap<String, String>) {
+    fun getShopperStateNew() {
+        val params = dataManager.getShopperStateNewParams()
 
         compositeDisposable.add(
                 shopperRepository.getShopperStateNew(params)
