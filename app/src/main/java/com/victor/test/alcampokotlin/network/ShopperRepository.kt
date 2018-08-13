@@ -15,5 +15,4 @@ interface ShopperRepository {
 
     @GET("shopper/GetShopperStateNew")
     fun getShopperStateNew(@QueryMap params: HashMap<String, String>): Observable<GetShopperStateNewResp>
-//    fun getShopperStateNew(@ params: GetShopperStateNewBody): Observable<GetShopperStateNewResp>
 }

@@ -20,10 +20,13 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import java.sql.Time
 import java.util.*
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 /**
@@ -52,7 +55,6 @@ class ShopperPresenterTest: ParentUnitTest() {
         super.setUp()
 
         testNetworkComponent.inject(this)
-        System.out.println("ShopperPresenterTest - createMockedShopperPresenter! - repos :: $shopperRepository / $mockedShopperRepository")
 
         MockitoAnnotations.initMocks(this)
         shopperPresenter = createMockedShopperPresenter()
@@ -82,29 +84,26 @@ class ShopperPresenterTest: ParentUnitTest() {
          * Important!
          * Uncommenting whenever sentence, we use mocked params and responses, otherwise, we test REAL context!!
          * So, for testing in both REAL and MOCKED cases, it's necessary to comment the corresponding provider, in TestNetworkModule class,
-         * according with the context we are going to test
+         * according with the context we are going to testK
          */
-
-//        whenever(shopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
         whenever(mockedShopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
 
         shopperPresenter.getShopperStateNew(shopperStateParams)
         testScheduler.triggerActions()
 
-//        verify(shopperRepository, times(1)).getShopperStateNew(shopperStateParams)
         verify(mockedShopperRepository, times(1)).getShopperStateNew(shopperStateParams)
+        verify(shopperView, times(1)).onContextValueReceived()
     }
 
-
     @Test
-    fun `should return context value in ShopperView interface`() {
-
-        Mockito.`when`(shopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
+    fun `should return error in getShopperStateNew`() {
+        val throwable = Throwable()
+        val error = Observable.error<GetShopperStateNewResp>(throwable)
+        whenever(shopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(error)
 
         shopperPresenter.getShopperStateNew(shopperStateParams)
         testScheduler.triggerActions()
 
-
-        verify(shopperView).onContextValueReceived(any())
+        verify(shopperView, times(1)).onNetworkError(throwable)
     }
 }

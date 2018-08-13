@@ -4,6 +4,10 @@ import com.victor.test.alcampokotlin.data.DataManager
 import com.victor.test.alcampokotlin.network.ShopperRepository
 import com.victor.test.alcampokotlin.presenters.Presenter
 import io.reactivex.Scheduler
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.internal.disposables.DisposableContainer
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 /**
@@ -17,26 +21,28 @@ class ShopperPresenter @Inject constructor(private val androidSchedulers: Schedu
 
 
     interface ShopperView {
-        fun onContextValueReceived(context: String) { }
+        fun onContextValueReceived() { }
+        fun onNetworkError(exception: Throwable) { }
     }
+
+
+
+    private val compositeDisposable = CompositeDisposable()
+
 
 
 
 
     fun getShopperStateNew(params: HashMap<String, String>) {
 
-        System.out.println("ShopperPresenter - getShopperStateNew - entra!")
-
-        shopperRepository.getShopperStateNew(params)
+        compositeDisposable.add(
+                shopperRepository.getShopperStateNew(params)
                 .observeOn(androidSchedulers)
                 .subscribeOn(subscriberSchedulers)
-                .doOnSubscribe {
-                    System.out.println("ShopperPresenter - getShopperStateNew - onSubscribe!")
-                }
                 .subscribe(
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - onNext! :: ${it.shopperCtx} | $view")
-                            view?.onContextValueReceived(it.shopperCtx)
+                            view?.onContextValueReceived()
 
                             dataManager.shopperCtx = it.shopperCtx
                             dataManager.favouriteStore = it.favouriteStore
@@ -44,15 +50,19 @@ class ShopperPresenter @Inject constructor(private val androidSchedulers: Schedu
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - error :: " + it.localizedMessage)
                             it.printStackTrace()
+                            view?.onNetworkError(it)
                         },
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - finish")
                         }
-                )
+                ))
+
+
 
     }
 
     override fun destroy() {
+        compositeDisposable.dispose()
         view = null
         System.out.println("ShopperPresenter - destroy!")
     }

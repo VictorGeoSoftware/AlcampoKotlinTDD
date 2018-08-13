@@ -48,11 +48,8 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
 
     // ------------------------------------------------------------------------------------------------------------------
     // --------------------------------------------- SHOPPER VIEW INTERFACE ---------------------------------------------
-    override fun onContextValueReceived(context: String) {
-        System.out.println("MainActivity - onContextValueReceived :: $context")
-//        dataManager.shopperCtx = context
-        val intent = Intent(this, StoreActivity::class.java)
-        startActivity(intent)
+    override fun onContextValueReceived() {
+        // TODO :: compobar si hay tienda seleccionada
     }
 
 
