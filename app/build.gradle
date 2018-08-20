@@ -19,6 +19,9 @@ android {
         buildConfigField "String", "URL_BASE", rootProject.ext.prodUrl
         buildConfigField "String", "URL_BASE_ROOT", rootProject.ext.prodUrlRoot
 
+        // TODO :: try avoiding to use this
+        multiDexEnabled true
+
         // TODO :: configurar
 //        testApplicationId "com.victor.test.volvoweather.test"
 //        testInstrumentationRunner "com.victor.test.volvoweather.test.Instrumentation"
@@ -41,8 +44,12 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    // Unit testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -58,32 +65,25 @@ dependencies {
     // Mockito
     testImplementation 'com.nhaarman:mockito-kotlin:1.4.0'
     testImplementation 'org.mockito:mockito-core:2.8.9'
-
     // Dagger:: important!! For a complete compilation, and generate TestComponent classes
     // it's necessary to perform a test before instantiate any TestComponent class!
     kapt 'com.google.dagger:dagger-compiler:2.16'
     implementation 'com.google.dagger:dagger:2.16'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
-
     kaptTest 'com.google.dagger:dagger-compiler:2.16'
-    testImplementation "com.google.dagger:dagger:2.16"
+    testImplementation 'com.google.dagger:dagger:2.16'
     testAnnotationProcessor "com.google.dagger:dagger-compiler:2.16"
-
     kaptAndroidTest 'com.google.dagger:dagger-compiler:2.16'
-    androidTestImplementation "com.google.dagger:dagger:2.16"
+    androidTestImplementation 'com.google.dagger:dagger:2.16'
     androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:2.16"
-
-
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
-    //Glide
+    // Glide
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    //Cucumber
+    // Cucumber
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support:support-annotations:27.1.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'info.cukes:cucumber-android:1.2.5@jar'
     androidTestImplementation 'info.cukes:cucumber-picocontainer:1.2.4'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
 }

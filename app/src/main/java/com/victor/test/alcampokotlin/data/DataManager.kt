@@ -2,6 +2,7 @@ package com.victor.test.alcampokotlin.data
 
 import android.content.Context
 import com.victor.test.alcampokotlin.data.models.StoreDto
+import com.victor.test.alcampokotlin.network.bodies.GetStoreListByRegionBody
 import com.victor.test.alcampokotlin.utils.UniqueId
 import java.util.*
 
@@ -24,5 +25,9 @@ class DataManager(context: Context) {
         params["versionParam"] = Constants.WS_PARAM_VERSIONPARAM
 
         return params
+    }
+
+    fun getStoreListByRegionParams(latitude: Double, longitude: Double): GetStoreListByRegionBody {
+        return GetStoreListByRegionBody(shopperCtx!!, latitude, longitude)
     }
 }

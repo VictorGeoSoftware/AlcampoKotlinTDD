@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">AlcampoKotlin</string>
-    <string name="start">Comenzar</string>
+    <string name="start">Agreed</string>
     <string name="title_activity_store">StoreActivity</string>
+    <string name="stores">Stores</string>
+    <string name="message_position_requested">I need your position for show a list of stores near to you</string>
+    <string name="shopping_list">My shopping list</string>
+    <string name="tap_on_plus_button">Tap on plus button for create a new list</string>
 </resources>

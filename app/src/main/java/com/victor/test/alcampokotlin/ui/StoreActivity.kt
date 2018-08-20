@@ -1,50 +1,69 @@
 package com.victor.test.alcampokotlin.ui
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.victor.test.alcampokotlin.MainApplication
 import com.victor.test.alcampokotlin.R
-import com.victor.test.alcampokotlin.data.DataManager
-import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
+import com.victor.test.alcampokotlin.data.Constants.Companion.LOCATION_PERMISSION_REQUEST
 import com.victor.test.alcampokotlin.presenters.stores.StorePresenter
-import kotlinx.android.synthetic.main.activity_store.*
 import javax.inject.Inject
 
-class StoreActivity : ParentActivity(), StorePresenter.StoreView, ShopperPresenter.ShopperView {
-
-//    @Inject lateinit var shopperPresenter: ShopperPresenter
-//    @Inject lateinit var dataManager: DataManager
-
+class StoreActivity : ParentActivity(), StorePresenter.StoreView {
+    @Inject lateinit var storePresenter: StorePresenter
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
-        setSupportActionBar(toolbar)
-        (application as MainApplication).presenterComponent.inject(this)
+        (application as MainApplication).createPresenterComponent()
 
-        fabBack.setOnClickListener { finish() }
+        storePresenter.view = this
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        handleCurrentPosition()
+
+        // TODO :: meter BDD para caso de primer arranque de app
+
     }
-
-    override fun onResume() {
-        super.onResume()
-//        shopperPresenter.view = this
-        System.out.println("StoreActivity - onResume - setea View")
-
-//        val shopperCtx = dataManager.shopperCtx
-//        System.out.println("StoreActivity - onResume - shopperCtx recuperado :: $shopperCtx")
-
-//        val params = GetStoreListByRegionBody("e5a5d18b83168cd79bea3e16ceec6976683192", 12.345, 3.124)
-//        storePresenter.getStoreList(params)
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()
-//        shopperPresenter.destroy()
-//        storePresenter.destroy()
+        storePresenter.destroy()
+        (application as MainApplication).releasePresenterComponent()
     }
 
-    override fun onBackPressed() {
-        finish()
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            handleCurrentPosition()
+        }
+    }
+
+
+
+    // -------------------------------------------------------------------------------------------------------
+    // ---------------------------------------- STORE VIEW INTERFACE -----------------------------------------
+
+
+
+
+    // -------------------------------------------------------------------------------------------------------
+    // ---------------------------------------- METHODS AND RUNNABLES ----------------------------------------
+    private fun handleCurrentPosition() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                it?.let {
+                    storePresenter.getStoreList(it.latitude, it.longitude)
+                } ?: kotlin.run {
+                    storePresenter.getStoreList(0.0, 0.0)
+                }
+            }
+        } else {
+            val permission = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            ActivityCompat.requestPermissions(this, permission, LOCATION_PERMISSION_REQUEST)
+        }
     }
 }

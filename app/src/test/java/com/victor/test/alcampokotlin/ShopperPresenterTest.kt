@@ -39,7 +39,7 @@ class ShopperPresenterTest: ParentUnitTest() {
     private lateinit var shopperPresenter: ShopperPresenter
 
     private val shopperStateParams = HashMap<String, String>()
-    private val mockedShopperStateResponseObs = Observable.just(GetShopperStateNewResp(false, "abc123", StoreDto(), Status(), ArrayList()))
+//    private val mockedShopperStateResponseObs = Observable.just(GetShopperStateNewResp(false, "abc123", StoreDto(), Status(), ArrayList()))
     private lateinit var testScheduler:TestScheduler
 
 
@@ -71,7 +71,7 @@ class ShopperPresenterTest: ParentUnitTest() {
     // ---------------------------------------------------------------------------------------------
     // --------------------------------------------- TEST CASES ------------------------------------
     @Test
-    fun `should receive new shopperCtx value`() {
+    fun `should receive favourite StoreDto value`() {
 
         /**
          * Important!
@@ -79,6 +79,8 @@ class ShopperPresenterTest: ParentUnitTest() {
          * So, for testing in both REAL and MOCKED cases, it's necessary to comment the corresponding provider, in TestNetworkModule class,
          * according with the context we are going to testK
          */
+        val response = GetShopperStateNewResp(false, "abc123", StoreDto(), Status(), ArrayList())
+        val mockedShopperStateResponseObs = Observable.just(response)
 
         whenever(dataManager.getShopperStateNewParams()).thenReturn(shopperStateParams)
         whenever(mockedShopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
@@ -87,7 +89,22 @@ class ShopperPresenterTest: ParentUnitTest() {
         testScheduler.triggerActions()
 
         verify(mockedShopperRepository, times(1)).getShopperStateNew(shopperStateParams)
-        verify(shopperView, times(1)).onContextValueReceived()
+        verify(shopperView, times(1)).onStoreReceived(dataManager.favouriteStore)
+    }
+
+    @Test
+    fun `should receive null StoreDto value`() {
+        val response = GetShopperStateNewResp(false, "abc123", null, Status(), ArrayList())
+        val mockedShopperStateResponseObs = Observable.just(response)
+
+        whenever(dataManager.getShopperStateNewParams()).thenReturn(shopperStateParams)
+        whenever(mockedShopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
+
+        shopperPresenter.getShopperStateNew()
+        testScheduler.triggerActions()
+
+        verify(mockedShopperRepository, times(1)).getShopperStateNew(shopperStateParams)
+        verify(shopperView, times(1)).onNoneStoreReceived()
     }
 
     @Test

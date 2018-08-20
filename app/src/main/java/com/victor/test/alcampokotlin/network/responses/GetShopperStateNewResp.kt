@@ -11,6 +11,6 @@ import com.victor.test.alcampokotlin.data.models.WsError
 data class GetShopperStateNewResp(
         val updateRequired: Boolean,
         val shopperCtx: String,
-        val favouriteStore: StoreDto,
+        val favouriteStore: StoreDto?,
         val status: Status,
         val errors: ArrayList<WsError>)

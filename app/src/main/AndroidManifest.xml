@@ -3,6 +3,7 @@
     package="com.victor.test.alcampokotlin">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MainApplication"
@@ -22,7 +23,7 @@
         <activity
             android:name=".ui.StoreActivity"
             android:label="@string/title_activity_store"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

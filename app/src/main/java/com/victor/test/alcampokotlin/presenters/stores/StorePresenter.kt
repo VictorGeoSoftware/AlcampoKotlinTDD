@@ -23,7 +23,8 @@ class StorePresenter @Inject constructor(private val androidSchedulers: Schedule
         fun onStoreListErrors(message: String) {}
     }
 
-    fun getStoreList(params: GetStoreListByRegionBody) {
+    fun getStoreList(latitude: Double, longitude: Double) {
+        val params = dataManager.getStoreListByRegionParams(latitude, longitude)
 
         storeRepository.getStoreListByRegion(params)
                 .observeOn(androidSchedulers)
@@ -31,7 +32,6 @@ class StorePresenter @Inject constructor(private val androidSchedulers: Schedule
                 .subscribe(
                         {
                             System.out.println("StorePresenter - response :: $it")
-                            // TODO :: hacer clase DataManager para almacenar tiendas
 
                             if (it.errors.isEmpty()) {
                                 view?.onStoreListReceived(it.stores)

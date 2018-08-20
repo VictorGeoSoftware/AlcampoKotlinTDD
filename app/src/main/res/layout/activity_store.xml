@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.victor.test.alcampokotlin.ui.StoreActivity">
+    tools:context="com.victor.test.alcampokotlin.ui.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stores"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
+
+        <LinearLayout
+            android:id="@+id/layout_no_stores"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/message_position_requested"
+                android:textSize="16sp"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/btnStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:text="@string/start"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lst_stores"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_store" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-</android.support.design.widget.CoordinatorLayout>
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+</layout>

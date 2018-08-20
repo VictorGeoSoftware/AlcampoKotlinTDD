@@ -1,13 +1,11 @@
 package com.victor.test.alcampokotlin.presenters.shopper
 
 import com.victor.test.alcampokotlin.data.DataManager
+import com.victor.test.alcampokotlin.data.models.StoreDto
 import com.victor.test.alcampokotlin.network.ShopperRepository
 import com.victor.test.alcampokotlin.presenters.Presenter
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.internal.disposables.DisposableContainer
-import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 /**
@@ -21,8 +19,9 @@ class ShopperPresenter @Inject constructor(private val androidSchedulers: Schedu
 
 
     interface ShopperView {
-        fun onContextValueReceived() { }
+        fun onStoreReceived(favouriteStore: StoreDto?) { }
         fun onNetworkError(exception: Throwable) { }
+        fun onNoneStoreReceived() { }
     }
 
 
@@ -41,10 +40,15 @@ class ShopperPresenter @Inject constructor(private val androidSchedulers: Schedu
                 .subscribe(
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - onNext! :: ${it.shopperCtx} | $view")
-                            view?.onContextValueReceived()
-
                             dataManager.shopperCtx = it.shopperCtx
                             dataManager.favouriteStore = it.favouriteStore
+
+                            dataManager.favouriteStore?.let {
+                                System.out.println("ShopperPresenter - getShopperStateNew - let => :: $it")
+                                view?.onStoreReceived(it)
+                            } ?: kotlin.run {
+                                view?.onNoneStoreReceived()
+                            }
                         },
                         {
                             System.out.println("ShopperPresenter - getShopperStateNew - error :: " + it.localizedMessage)

@@ -12,17 +12,27 @@ import javax.inject.Inject
  */
 class MainApplication: Application() {
 
+    var presenterComponent: PresenterComponent? = null
 
-    val component: AppComponent by lazy {
+    private val component: AppComponent by lazy {
         DaggerAppComponent.builder().appModule(AppModule(this)).build()
     }
-    lateinit var presenterComponent: PresenterComponent
+
 
 
 
     override fun onCreate() {
         super.onCreate()
         component.inject(this)
-        presenterComponent = component.plus(PresenterModule())
+    }
+
+
+    // https://medium.com/@kashwin95kumar/custom-scoping-in-dagger-2-for-android-9cf6030c2f8a
+    fun createPresenterComponent(): PresenterComponent {
+        return component.plus(PresenterModule())
+    }
+
+    fun releasePresenterComponent() {
+        presenterComponent = null
     }
 }
