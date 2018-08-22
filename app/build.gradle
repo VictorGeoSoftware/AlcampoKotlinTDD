@@ -22,9 +22,8 @@ android {
         // TODO :: try avoiding to use this
         multiDexEnabled true
 
-        // TODO :: configurar
-//        testApplicationId "com.victor.test.volvoweather.test"
-//        testInstrumentationRunner "com.victor.test.volvoweather.test.Instrumentation"
+        testApplicationId "com.victor.test.alcampokotlin.test"
+        testInstrumentationRunner "com.victor.test.alcampokotlin.test.Instrumentation"
     }
 
     dataBinding.enabled = true
@@ -35,8 +34,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     testOptions {
         unitTests.returnDefaultValues = true
+    }
+
+    sourceSets {
+        androidTest {
+            assets.srcDirs = ['src/androidTest/assets']
+        }
     }
 }
 
