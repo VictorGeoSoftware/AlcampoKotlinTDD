@@ -34,7 +34,7 @@
                 android:gravity="center"/>
 
             <Button
-                android:id="@+id/btnStart"
+                android:id="@+id/btn_grant_location_permission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

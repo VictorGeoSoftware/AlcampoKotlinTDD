@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intending
@@ -15,7 +16,6 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.uiautomator.UiDevice
-import android.support.test.uiautomator.UiObjectNotFoundException
 import android.support.test.uiautomator.UiSelector
 import com.victor.test.alcampokotlin.R
 import com.victor.test.alcampokotlin.ui.StoreActivity
@@ -84,7 +84,6 @@ class FirstLaunchTest {
     // ---------------------------------------- TEST CASES -----------------------------------------
     @Given("^A user is in MainActivity")
     fun A_user_is_in_MainActivity() {
-        // TODO :: activity is null, review!
         mTrace("A_user_is_in_MainActivity: $storeActivity")
         assertNotNull(storeActivity)
     }
@@ -94,17 +93,15 @@ class FirstLaunchTest {
         mTrace("No_favourite_store_is_defined!")
 //        onView(withId(R.id.txt_store_name)).check(matches(withText("")))
 //        intended(hasComponent(StoreActivity::class.jvmName))
-
         onView(withId(R.id.layout_no_stores)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_grant_location_permission)).perform(click())
     }
 
     @Then("^I should open StoreActivity")
     fun I_should_open_StoreActivity() {
+        allowLocationPermissions()
         mTrace("I_should_open_StoreActivity!")
-//        onView(withId(R.id.layout_no_stores)).check(matches(isDisplayed()))
-        mTrace("I_should_open_StoreActivity! -1")
-//        grantLocationPermissionRule
-        allowLocationPermissions()    }
+    }
 
 
 
@@ -123,7 +120,7 @@ class FirstLaunchTest {
             if (btnAllow.exists()) {
                 try {
                     btnAllow.click()
-                } catch (e: UiObjectNotFoundException) {
+                } catch (e: Exception) {
                     mTrace(e.localizedMessage)
                 }
             }
