@@ -12,12 +12,9 @@ import javax.inject.Inject
  */
 class MainApplication: Application() {
 
+    private val component: AppComponent by lazy { DaggerAppComponent.builder().appModule(AppModule(this)).build() }
+
     var presenterComponent: PresenterComponent? = null
-
-    private val component: AppComponent by lazy {
-        DaggerAppComponent.builder().appModule(AppModule(this)).build()
-    }
-
 
 
 

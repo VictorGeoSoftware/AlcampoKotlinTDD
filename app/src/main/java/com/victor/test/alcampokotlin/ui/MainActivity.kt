@@ -3,6 +3,7 @@ package com.victor.test.alcampokotlin.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.victor.test.alcampokotlin.MainApplication
 import com.victor.test.alcampokotlin.R
 import com.victor.test.alcampokotlin.data.Constants.Companion.REQUEST_SELECT_STORE
@@ -10,6 +11,7 @@ import com.victor.test.alcampokotlin.data.models.StoreDto
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
 import com.victor.test.alcampokotlin.presenters.stores.StorePresenter
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
@@ -20,7 +22,7 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        (application as MainApplication).createPresenterComponent()
+        (application as MainApplication).createPresenterComponent().inject(this)
 
         shopperPresenter.view = this
         shopperPresenter.getShopperStateNew()
@@ -54,8 +56,7 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     // ------------------------------------------------------------------------------------------------------------------
     // --------------------------------------------- SHOPPER VIEW INTERFACE ---------------------------------------------
     override fun onStoreReceived(favouriteStore: StoreDto?) {
-        // TODO :: check if favouriteStore exist!
-
+        txt_store_name.text = favouriteStore?.label
     }
 
     override fun onNoneStoreReceived() {

@@ -20,7 +20,7 @@ class StoreActivity : ParentActivity(), StorePresenter.StoreView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
-        (application as MainApplication).createPresenterComponent()
+        (application as MainApplication).createPresenterComponent().inject(this)
 
         storePresenter.view = this
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)

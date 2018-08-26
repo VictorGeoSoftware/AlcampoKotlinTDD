@@ -25,3 +25,7 @@ private fun getCurrentActivityOnMainThread(): Activity? {
     val activities = registry.getActivitiesInStage(Stage.RESUMED)
     return if (activities.iterator().hasNext()) activities.iterator().next() else null
 }
+
+fun Any.mTrace(message: String) {
+    System.out.println("AlcampoKotlin ${this.javaClass.name} | message: $message")
+}
