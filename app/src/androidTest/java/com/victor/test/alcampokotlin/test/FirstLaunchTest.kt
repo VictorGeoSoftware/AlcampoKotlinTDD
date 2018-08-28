@@ -1,33 +1,33 @@
 package com.victor.test.alcampokotlin.test
 
-import android.app.Activity
-import android.app.Instrumentation
 import android.content.Intent
 import android.os.Build
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.onData
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.intent.Intents.intending
-import android.support.test.espresso.intent.matcher.IntentMatchers.isInternal
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
-import android.support.test.rule.GrantPermissionRule
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
 import com.victor.test.alcampokotlin.R
+import com.victor.test.alcampokotlin.ui.MainActivity
 import com.victor.test.alcampokotlin.ui.StoreActivity
 import com.victor.test.alcampokotlin.utils.mTrace
 import cucumber.api.java.After
 import cucumber.api.java.Before
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
+import kotlin.reflect.jvm.jvmName
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -42,65 +42,68 @@ If I want to keep my Test classes in victor.test.alcampokotlin, I have to change
  */
 
 class FirstLaunchTest {
-//    @Rule
-//    val activityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
-
-//    @get:Rule
-//    val storeActivityTestRule: IntentsTestRule<StoreActivity> = IntentsTestRule(StoreActivity::class.java)
     @Rule
-    val storeActivityTestRule: ActivityTestRule<StoreActivity> = ActivityTestRule(StoreActivity::class.java)
-
-    @Rule
-    val grantLocationPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+    val mainActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     private lateinit var mDevice: UiDevice
-
-
-//    private lateinit var activity: Activity
-    private lateinit var storeActivity: StoreActivity
+    private lateinit var mainActivity: MainActivity
 
 
     @Before
     fun setUp() {
+        mTrace("setUp!")
         Intents.init()
-//        activityTestRule.launchActivity(Intent())
-//        activity = activityTestRule.activity
-        storeActivityTestRule.launchActivity(Intent())
-        storeActivity = storeActivityTestRule.activity
+        mainActivityTestRule.launchActivity(Intent())
+        mainActivity = mainActivityTestRule.activity
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        intending(not(isInternal())).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
     }
 
     @After
     fun tearDown() {
+        mTrace("tearDown!")
         Intents.release()
-//        activityTestRule.finishActivity()
-        storeActivityTestRule.finishActivity()
+        mainActivityTestRule.finishActivity()
     }
 
 
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------- TEST CASES -----------------------------------------
-    @Given("^A user is in MainActivity")
-    fun A_user_is_in_MainActivity() {
-        mTrace("A_user_is_in_MainActivity: $storeActivity")
-        assertNotNull(storeActivity)
+    @Given("^a user launching the app for first time")
+    fun a_user_launching_the_app_for_first_time() {
+        assertNotNull(mainActivity)
+        onView(withId(R.id.txt_store_name)).check(matches(withText("")))
     }
 
-    @When("^No favourite store is defined")
-    fun No_favourite_store_is_defined() {
-        mTrace("No_favourite_store_is_defined!")
-//        onView(withId(R.id.txt_store_name)).check(matches(withText("")))
-//        intended(hasComponent(StoreActivity::class.jvmName))
+    @When("^no favourite store is received")
+    fun no_favourite_store_is_received() {
+        intended(hasComponent(StoreActivity::class.jvmName))
+    }
+
+    @And("^the store view is launched")
+    fun the_store_view_is_launched() {
+        onView(withId(R.id.txt_stores_title)).check(matches(isDisplayed()))
+    }
+
+    @And("^app have not location permissions")
+    fun app_have_not_location_permissions() {
         onView(withId(R.id.layout_no_stores)).check(matches(isDisplayed()))
+        onView(withId(R.id.lst_stores)).check(matches(CoreMatchers.not(isDisplayed())))
+    }
+
+    @And("^user tap on grant location button")
+    fun user_tap_on_grant_location_button() {
         onView(withId(R.id.btn_grant_location_permission)).perform(click())
     }
 
-    @Then("^I should open StoreActivity")
-    fun I_should_open_StoreActivity() {
+    @And("^user grant location permission")
+    fun user_grant_location_permission() {
         allowLocationPermissions()
-        mTrace("I_should_open_StoreActivity!")
+    }
+
+    @Then("^store list is retrieved and shown")
+    fun store_list_is_retrieved_and_shown() {
+        onView(withId(R.id.txt_stores_title)).check(matches(withText("Stores in 15 cities")))
     }
 
 
@@ -115,7 +118,7 @@ class FirstLaunchTest {
     // ---------------------------------------- METHODS --------------------------------------------
     private fun allowLocationPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            val btnAllow = mDevice.findObject(UiSelector().text("Allow"))
+            val btnAllow = mDevice.findObject(UiSelector().text("ALLOW"))
 
             if (btnAllow.exists()) {
                 try {

@@ -61,7 +61,8 @@ class StoreActivity : ParentActivity(), StorePresenter.StoreView {
     // -------------------------------------------------------------------------------------------------------
     // ---------------------------------------- STORE VIEW INTERFACE -----------------------------------------
     override fun onStoreListReceived(stores: HashMap<String, StoreListByRegionDto>) {
-
+        val title = "Stores in ${stores.size} cities"
+        txt_stores_title.text = title
     }
 
     override fun onStoreListErrors(message: String) {

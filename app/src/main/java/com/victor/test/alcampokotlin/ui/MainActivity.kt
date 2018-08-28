@@ -60,6 +60,10 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     }
 
     override fun onNoneStoreReceived() {
+        Thread.sleep(1000) // This is necessary for a good execution of cucumber test
+
+        txt_store_name.text = ""
+
         val intent = Intent(this, StoreActivity::class.java)
         startActivityForResult(intent, REQUEST_SELECT_STORE)
     }

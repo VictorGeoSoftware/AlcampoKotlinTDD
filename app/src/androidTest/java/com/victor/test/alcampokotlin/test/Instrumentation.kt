@@ -10,7 +10,8 @@ import cucumber.api.android.CucumberInstrumentationCore
  * ${APP_NAME}
  */
 
-@CucumberOptions(features = ["features"], glue = ["com.victor.test.alcampokotlin.test"])
+//@CucumberOptions(features = ["features"], glue = ["com.victor.test.alcampokotlin.test"])
+@CucumberOptions(features = ["features/first_start.feature"], glue = ["com.victor.test.alcampokotlin.test"]) // Way of instantiating only one feature!
 class Instrumentation: MonitoringInstrumentation() {
     private val instrumentationCore = CucumberInstrumentationCore(this)
 
