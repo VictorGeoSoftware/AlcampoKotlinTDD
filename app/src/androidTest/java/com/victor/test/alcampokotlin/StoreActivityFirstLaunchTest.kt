@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.NoMatchingViewException
-import android.support.test.espresso.ViewAssertion
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
@@ -13,9 +11,7 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import com.victor.test.alcampokotlin.StoreActivityFirstLaunchTest.RecyclerViewItemCountAssertion.Companion.withItemCount
+import com.victor.test.alcampokotlin.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
 import com.victor.test.alcampokotlin.ui.StoreActivity
 import com.victor.test.alcampokotlin.utils.mTrace
 import cucumber.api.java.After
@@ -24,9 +20,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.not
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.greaterThan
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
@@ -91,7 +85,6 @@ class StoreActivityFirstLaunchTest {
 
         // onView(withId(R.id.lstWeatherForecast)).check(withItemCount(greaterThan(5)))
         mTrace("store_list_is_retrieved_and_shown!")
-        onView(withId(R.id.txt_stores_title)).check(matches(withText("Stores in 14 cities")))
         onView(withId(R.id.lst_stores)).check(withItemCount(greaterThan(0)))
     }
 
@@ -112,36 +105,36 @@ class StoreActivityFirstLaunchTest {
         }
     }
 
-    private class RecyclerViewItemCountAssertion: ViewAssertion {
-        lateinit var matcher: Matcher<Int>
-
-
-        constructor(matcher: Matcher<Int>) {
-            this.matcher = matcher
-        }
-
-
-        companion object {
-            fun withMyItemCount(expectedCount: Int): RecyclerViewItemCountAssertion {
-                return withItemCount(CoreMatchers.`is`(expectedCount))
-            }
-
-            fun withItemCount(matcher: Matcher<Int>): RecyclerViewItemCountAssertion {
-                return RecyclerViewItemCountAssertion(matcher)
-            }
-        }
-
-
-
-        override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
-            if (noViewFoundException != null) {
-                throw noViewFoundException
-            }
-
-            val recyclerView = view as RecyclerView
-            val adapter = recyclerView.adapter
-            assertThat(adapter.itemCount, matcher)
-        }
-
-    }
+//    private class RecyclerViewItemCountAssertion: ViewAssertion {
+//        lateinit var matcher: Matcher<Int>
+//
+//
+//        constructor(matcher: Matcher<Int>) {
+//            this.matcher = matcher
+//        }
+//
+//
+//        companion object {
+//            fun withMyItemCount(expectedCount: Int): RecyclerViewItemCountAssertion {
+//                return withItemCount(CoreMatchers.`is`(expectedCount))
+//            }
+//
+//            fun withItemCount(matcher: Matcher<Int>): RecyclerViewItemCountAssertion {
+//                return RecyclerViewItemCountAssertion(matcher)
+//            }
+//        }
+//
+//
+//
+//        override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
+//            if (noViewFoundException != null) {
+//                throw noViewFoundException
+//            }
+//
+//            val recyclerView = view as RecyclerView
+//            val adapter = recyclerView.adapter
+//            assertThat(adapter.itemCount, matcher)
+//        }
+//
+//    }
 }

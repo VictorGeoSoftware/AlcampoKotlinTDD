@@ -6,4 +6,6 @@
     <string name="message_position_requested">I need your position for show a list of stores near to you</string>
     <string name="shopping_list">My shopping list</string>
     <string name="tap_on_plus_button">Tap on plus button for create a new list</string>
+    <string name="message_select_store">There is no store selected</string>
+    <string name="action_select_one">Pick one</string>
 </resources>

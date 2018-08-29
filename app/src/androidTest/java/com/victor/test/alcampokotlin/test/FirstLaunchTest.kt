@@ -15,6 +15,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
 import com.victor.test.alcampokotlin.R
+import com.victor.test.alcampokotlin.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
 import com.victor.test.alcampokotlin.ui.MainActivity
 import com.victor.test.alcampokotlin.ui.StoreActivity
 import com.victor.test.alcampokotlin.utils.mTrace
@@ -25,6 +26,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import org.hamcrest.CoreMatchers
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import kotlin.reflect.jvm.jvmName
@@ -66,7 +68,7 @@ class FirstLaunchTest {
     }
 
 
-
+    // TODO :: terminar de testear bien
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------- TEST CASES -----------------------------------------
     @Given("^a user launching the app for first time")
@@ -77,18 +79,19 @@ class FirstLaunchTest {
 
     @When("^no favourite store is received")
     fun no_favourite_store_is_received() {
+        onView(allOf(withId(android.support.design.R.id.snackbar_action))).perform(click())
         intended(hasComponent(StoreActivity::class.jvmName))
     }
 
     @And("^the store view is launched")
     fun the_store_view_is_launched() {
-        onView(withId(R.id.txt_stores_title)).check(matches(isDisplayed()))
+//        onView(withId(R.id.txt_stores_title)).check(matches(isDisplayed()))
     }
 
     @And("^app have not location permissions")
     fun app_have_not_location_permissions() {
         onView(withId(R.id.layout_no_stores)).check(matches(isDisplayed()))
-        onView(withId(R.id.lst_stores)).check(matches(CoreMatchers.not(isDisplayed())))
+        onView(withId(R.id.lst_stores)).check(matches(not(isDisplayed())))
     }
 
     @And("^user tap on grant location button")
@@ -103,7 +106,11 @@ class FirstLaunchTest {
 
     @Then("^store list is retrieved and shown")
     fun store_list_is_retrieved_and_shown() {
-        onView(withId(R.id.txt_stores_title)).check(matches(withText("Stores in 15 cities")))
+        // TODO :: show store list!
+        // TODO :: complete test choosing one, notifying to server, and coming back to MainActivity
+        Thread.sleep(3000)
+        onView(withId(R.id.layout_no_stores)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.lst_stores)).check(withItemCount(greaterThan(0)))
     }
 
 

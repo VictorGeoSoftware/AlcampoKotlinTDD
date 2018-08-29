@@ -3,7 +3,7 @@
 ext {
     androidMinSdkVersion = 18
     androidSdkVersion = 27
-    androidSupportVersion = '27.0.2'
+    androidSupportVersion = '27.0.3'
     playServicesVersion = '11.8.0'
     largeTimeOut = '300000'
     productionTimeOut = '30000'

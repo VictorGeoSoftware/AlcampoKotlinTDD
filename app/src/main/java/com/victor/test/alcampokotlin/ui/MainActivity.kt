@@ -3,6 +3,7 @@ package com.victor.test.alcampokotlin.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.view.View
 import com.victor.test.alcampokotlin.MainApplication
 import com.victor.test.alcampokotlin.R
@@ -26,6 +27,8 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
 
         shopperPresenter.view = this
         shopperPresenter.getShopperStateNew()
+
+
     }
 
     override fun onResume() {
@@ -60,12 +63,14 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     }
 
     override fun onNoneStoreReceived() {
-        Thread.sleep(1000) // This is necessary for a good execution of cucumber test
-
         txt_store_name.text = ""
 
-        val intent = Intent(this, StoreActivity::class.java)
-        startActivityForResult(intent, REQUEST_SELECT_STORE)
+        val snackBar = Snackbar.make(main_layout, getString(R.string.message_select_store), Snackbar.LENGTH_INDEFINITE)
+        snackBar.setAction(getString(R.string.action_select_one)) {
+            val intent = Intent(this, StoreActivity::class.java)
+            startActivityForResult(intent, REQUEST_SELECT_STORE)
+        }
+        snackBar.show()
     }
 
     override fun onNetworkError(exception: Throwable) {
