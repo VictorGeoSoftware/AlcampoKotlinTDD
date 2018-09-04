@@ -22,6 +22,7 @@ open class ParentUnitTest {
     @Component(modules = [NetworkModule::class])
     interface TestNetworkComponent: NetworkComponent {
         fun inject(target: ShopperPresenterTest)
+        fun inject(target: StorePresenterTest)
     }
 
     @Before

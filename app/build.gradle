@@ -44,6 +44,14 @@ android {
             assets.srcDirs = ['src/androidTest/assets']
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+androidExtensions {
+    experimental = true
 }
 
 dependencies {

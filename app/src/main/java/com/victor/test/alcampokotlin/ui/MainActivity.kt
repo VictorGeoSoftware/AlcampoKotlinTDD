@@ -8,6 +8,7 @@ import android.view.View
 import com.victor.test.alcampokotlin.MainApplication
 import com.victor.test.alcampokotlin.R
 import com.victor.test.alcampokotlin.data.Constants.Companion.REQUEST_SELECT_STORE
+import com.victor.test.alcampokotlin.data.Constants.Companion.STORE
 import com.victor.test.alcampokotlin.data.models.StoreDto
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.presenters.shopper.ShopperPresenter
@@ -44,12 +45,16 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_STORE) {
             if (resultCode == Activity.RESULT_OK) {
-                // dejar todo como está
+                val selectedStore = data?.getParcelableExtra<StoreDto>(STORE)
+
+                selectedStore.let {
+                    txt_store_name.text = it?.label
+                    Snackbar.make(main_layout, getString(R.string.msg_store_selected), Snackbar.LENGTH_SHORT).show()
+                }
             } else {
-                // volver a pedir tienda
+                showNotStoreSnackBar()
             }
         }
     }
@@ -64,7 +69,18 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
 
     override fun onNoneStoreReceived() {
         txt_store_name.text = ""
+        showNotStoreSnackBar()
+    }
 
+    override fun onNetworkError(exception: Throwable) {
+        // TODO :: show a SnackBar or something like that
+    }
+
+
+
+    // ------------------------------------------------------------------------------------------------------------------
+    // --------------------------------------------- METHODS AND RUNNABLES ----------------------------------------------
+    private fun showNotStoreSnackBar() {
         val snackBar = Snackbar.make(main_layout, getString(R.string.message_select_store), Snackbar.LENGTH_INDEFINITE)
         snackBar.setAction(getString(R.string.action_select_one)) {
             val intent = Intent(this, StoreActivity::class.java)
@@ -72,9 +88,4 @@ class MainActivity: ParentActivity(), ShopperPresenter.ShopperView {
         }
         snackBar.show()
     }
-
-    override fun onNetworkError(exception: Throwable) {
-        // TODO :: show a SnackBar or something like that
-    }
-
 }

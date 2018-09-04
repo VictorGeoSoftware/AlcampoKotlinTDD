@@ -8,4 +8,5 @@
     <string name="tap_on_plus_button">Tap on plus button for create a new list</string>
     <string name="message_select_store">There is no store selected</string>
     <string name="action_select_one">Pick one</string>
+    <string name="msg_store_selected">Store has been selected successfully</string>
 </resources>

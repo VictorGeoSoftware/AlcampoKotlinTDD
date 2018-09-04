@@ -1,13 +1,17 @@
 package com.victor.test.alcampokotlin.data.models
 
+import android.os.Parcelable
 import android.support.annotation.Size
+import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
 /**
  * Created by victorpalmacarrasco on 8/3/18.
  * ${APP_NAME}
  */
-class StoreDto {
+
+@Parcelize
+class StoreDto : Parcelable {
     var id: Long? = null
 
     var precode: String? = null

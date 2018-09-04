@@ -1,6 +1,8 @@
 package com.victor.test.alcampokotlin.ui
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -11,7 +13,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.victor.test.alcampokotlin.MainApplication
 import com.victor.test.alcampokotlin.R
+import com.victor.test.alcampokotlin.data.Constants
 import com.victor.test.alcampokotlin.data.Constants.Companion.LOCATION_PERMISSION_REQUEST
+import com.victor.test.alcampokotlin.data.models.StoreDto
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.presenters.stores.StorePresenter
 import com.victor.test.alcampokotlin.ui.adapters.StoresAdapter
@@ -19,7 +23,7 @@ import com.victor.test.alcampokotlin.utils.traceObject
 import kotlinx.android.synthetic.main.activity_store.*
 import javax.inject.Inject
 
-class StoreActivity : ParentActivity(), StorePresenter.StoreView {
+class StoreActivity : ParentActivity(), StorePresenter.StoreView, StoresAdapter.StoreSelectedListener {
     @Inject lateinit var storePresenter: StorePresenter
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -43,7 +47,7 @@ class StoreActivity : ParentActivity(), StorePresenter.StoreView {
         }
 
         lst_stores.layoutManager = LinearLayoutManager(this)
-        storesAdapter = StoresAdapter(storesHashMap)
+        storesAdapter = StoresAdapter(storesHashMap, this)
         lst_stores.adapter = storesAdapter
 
 
@@ -64,26 +68,40 @@ class StoreActivity : ParentActivity(), StorePresenter.StoreView {
         }
     }
 
+    override fun onStoreSelected(store: StoreDto) {
+        store.id.let {
+            storePresenter.selectFavouriteStore(it.toString())
+        }
+    }
 
 
     // -------------------------------------------------------------------------------------------------------
     // ---------------------------------------- STORE VIEW INTERFACE -----------------------------------------
     override fun onStoreListReceived(stores: HashMap<String, StoreListByRegionDto>) {
-        // TODO :: pintar la lista de tiendas!
         // TODO :: muy buen proyecto, injecta presenter en instrumentation test!
         // https://github.com/mohsenoid/fyber_mobile_offers/blob/master/app/src/androidTest/java/com/mirhoseini/fyber/test/dagger/MainActivityDaggerTest.java
 
         storesHashMap.clear()
         storesHashMap = stores
-        traceObject("onStoreListReceived :: ${storesHashMap.size}")
 
 //        storesAdapter.notifyDataSetChanged()
-        storesAdapter = StoresAdapter(storesHashMap)
+        storesAdapter = StoresAdapter(storesHashMap, this)
         lst_stores.adapter = storesAdapter
     }
 
     override fun onStoreListErrors(message: String) {
         // TODO :: mostrar algún tipo de error
+    }
+
+    override fun onSelectFavouriteStoreConfirmed(store: StoreDto) {
+        val intent = Intent()
+        intent.putExtra(Constants.STORE, store)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
+
+    override fun onSelectFavouriteStoreError() {
+        // TODO :: mostrar mensaje de error!
     }
 
 

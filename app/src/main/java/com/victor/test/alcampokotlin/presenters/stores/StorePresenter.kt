@@ -1,6 +1,7 @@
 package com.victor.test.alcampokotlin.presenters.stores
 
 import com.victor.test.alcampokotlin.data.DataManager
+import com.victor.test.alcampokotlin.data.models.StoreDto
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.network.StoreRepository
 import com.victor.test.alcampokotlin.network.bodies.GetStoreListByRegionBody
@@ -21,6 +22,8 @@ class StorePresenter @Inject constructor(private val androidSchedulers: Schedule
     interface StoreView {
         fun onStoreListReceived(stores: HashMap<String, StoreListByRegionDto>) {}
         fun onStoreListErrors(message: String) {}
+        fun onSelectFavouriteStoreConfirmed(store: StoreDto) {}
+        fun onSelectFavouriteStoreError() { }
     }
 
     fun getStoreList(latitude: Double, longitude: Double) {
@@ -48,6 +51,25 @@ class StorePresenter @Inject constructor(private val androidSchedulers: Schedule
                             System.out.println("StorePresenter - finish!")
                         }
                 )
+    }
+
+    fun selectFavouriteStore(storeId: String) {
+        System.out.println("StorePresenter - selectFavouriteStore :: ${dataManager.shopperCtx} $storeId")
+        storeRepository.selectFavouriteStore(dataManager.shopperCtx!!, storeId)
+                .observeOn(androidSchedulers)
+                .subscribeOn(subscriberSchedulers)
+                .subscribe(
+                        {
+                            if (it.errors.isEmpty()) {
+                                view?.onSelectFavouriteStoreConfirmed(it.favouriteStore)
+                            } else {
+                                view?.onSelectFavouriteStoreError()
+                            }
+                        },
+                        {
+                            it.printStackTrace()
+                            view?.onSelectFavouriteStoreError()
+                        })
     }
 
 

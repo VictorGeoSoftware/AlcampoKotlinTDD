@@ -16,7 +16,7 @@ import javax.inject.Named
 class TestNetworkModule: NetworkModule() {
 
     override fun provideShopperRequest(retrofit: Retrofit): ShopperRepository {
-//        return super.provideShopperRequest(retrofit)
-        return Mockito.mock(ShopperRepository::class.java)
+        return super.provideShopperRequest(retrofit)
+//        return Mockito.mock(ShopperRepository::class.java)
     }
 }

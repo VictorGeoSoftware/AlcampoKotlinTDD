@@ -106,11 +106,11 @@ class FirstLaunchTest {
 
     @Then("^store list is retrieved and shown")
     fun store_list_is_retrieved_and_shown() {
-        // TODO :: show store list!
-        // TODO :: complete test choosing one, notifying to server, and coming back to MainActivity
         Thread.sleep(3000)
         onView(withId(R.id.layout_no_stores)).check(matches(not(isDisplayed())))
         onView(withId(R.id.lst_stores)).check(withItemCount(greaterThan(0)))
+
+        // TODO :: complete test choosing one, notifying to server, and coming back to MainActivity
     }
 
 

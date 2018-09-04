@@ -7,7 +7,6 @@ import com.victor.test.alcampokotlin.R
 import com.victor.test.alcampokotlin.data.models.StoreDto
 import com.victor.test.alcampokotlin.data.models.StoreListByRegionDto
 import com.victor.test.alcampokotlin.utils.inflate
-import com.victor.test.alcampokotlin.utils.traceObject
 import kotlinx.android.synthetic.main.row_stores_adapter_detail.view.*
 import kotlinx.android.synthetic.main.row_stores_adapter_header.view.*
 
@@ -15,7 +14,7 @@ import kotlinx.android.synthetic.main.row_stores_adapter_header.view.*
  * Created by victorpalmacarrasco on 28/8/18.
  * ${APP_NAME}
  */
-class StoresAdapter(storeHashMap: HashMap<String, StoreListByRegionDto>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StoresAdapter(storeHashMap: HashMap<String, StoreListByRegionDto>, storeSelectedListener: StoreSelectedListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val TYPE_HEADER = 0
@@ -23,6 +22,7 @@ class StoresAdapter(storeHashMap: HashMap<String, StoreListByRegionDto>): Recycl
     }
 
     private val itemsToShowList = ArrayList<Any>()
+    private var storeSelectedListener: StoreSelectedListener = storeSelectedListener
 
     init {
         val setList = storeHashMap.keys
@@ -33,8 +33,6 @@ class StoresAdapter(storeHashMap: HashMap<String, StoreListByRegionDto>): Recycl
                 itemsToShowList.addAll(it.storeList)
             }
         }
-
-        traceObject("itemsToShowList size :: ${itemsToShowList.size}")
     }
 
 
@@ -51,19 +49,18 @@ class StoresAdapter(storeHashMap: HashMap<String, StoreListByRegionDto>): Recycl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        traceObject("onCreateViewHolder - type :: $viewType")
-        return if (viewType == TYPE_STORE) {
-            CityHeaderViewHolder(parent.inflate(R.layout.row_stores_adapter_detail))
+        return if (viewType == TYPE_HEADER) {
+            CityHeaderViewHolder(parent.inflate(R.layout.row_stores_adapter_header))
         } else {
-            StoreViewHolder(parent.inflate(R.layout.row_stores_adapter_header))
+            StoreViewHolder(parent.inflate(R.layout.row_stores_adapter_detail))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is StoreViewHolder) {
-            holder.bind(itemsToShowList[position] as StoreDto)
-        } else if (holder is CityHeaderViewHolder) {
+        if (holder is CityHeaderViewHolder) {
             holder.bind(itemsToShowList[position] as String)
+        } else if (holder is StoreViewHolder) {
+            holder.bind(itemsToShowList[position] as StoreDto, storeSelectedListener)
         }
     }
 
@@ -74,10 +71,17 @@ class StoresAdapter(storeHashMap: HashMap<String, StoreListByRegionDto>): Recycl
     }
 
     class StoreViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(store: StoreDto) = with(itemView) {
+        fun bind(store: StoreDto, storeSelectedListener: StoreSelectedListener) = with(itemView) {
             txt_store_name.text = store.label
             txt_store_address.text = store.street
             txt_store_schedule.text = store.phoneNumber
+
+            this.setOnClickListener { storeSelectedListener.onStoreSelected(store) }
         }
+    }
+
+
+    interface StoreSelectedListener {
+        fun onStoreSelected(store:StoreDto)
     }
 }

@@ -80,10 +80,10 @@ class ShopperPresenterTest: ParentUnitTest() {
          * according with the context we are going to testK
          */
         val response = GetShopperStateNewResp(false, "abc123", StoreDto(), Status(), ArrayList())
-        val mockedShopperStateResponseObs = Observable.just(response)
+//        val mockedShopperStateResponseObs = Observable.just(response)
 
         whenever(dataManager.getShopperStateNewParams()).thenReturn(shopperStateParams)
-        whenever(mockedShopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
+//        whenever(mockedShopperRepository.getShopperStateNew(shopperStateParams)).thenReturn(mockedShopperStateResponseObs)
 
         shopperPresenter.getShopperStateNew()
         testScheduler.triggerActions()
